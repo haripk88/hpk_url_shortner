@@ -7,8 +7,8 @@ A URL shortener application built with **Laravel** as the backend and **Vue.js**
 1. Clone the repository
 
 ```bash
-git clone git@github.com:rkumwt/url-shortner.git
-cd url-shortner
+git clone https://github.com/haripk88/hpk_url_shortner
+cd hpk_url_shortner
 ```
 
 2. Install dependencies
@@ -43,7 +43,7 @@ php artisan db:seed
 
 > **Note:** If `APP_ENV=production` in your `.env` file, the seeder will only create the superadmin company with the following credentials:
 >
-> - **Email:** superadmin@example.com
+> - **Email:** superadmin@gmail.com
 > - **Password:** 12345678
 
 6. Configure mail settings in `.env` for sending invitation emails (you can use https://mailtrap.io for testing)
