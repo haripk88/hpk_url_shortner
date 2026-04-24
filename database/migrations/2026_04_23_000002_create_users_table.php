@@ -13,10 +13,15 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('company_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->enum('roles', ['superadmin', 'admin', 'member'])->default('admin');
+            $table->enum('status', ['pending', 'enabled'])->default('pending');
+            $table->integer('total_urls')->default(0);
+            $table->integer('total_url_hits')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

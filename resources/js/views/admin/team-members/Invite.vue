@@ -1,0 +1,122 @@
+<template>
+    <a-button type="primary" @click="showModal">Invite</a-button>
+    <a-modal
+        v-model:open="open"
+        title="Invite Team Member"
+        :footer="null"
+        :bodyStyle="{ marginTop: '40px' }"
+    >
+        <a-row>
+            <a-col :span="24">
+                <a-form layout="vertical">
+                    <a-form-item
+                        label="Name"
+                        name="name"
+                        :help="rules.name ? rules.name[0] : null"
+                        :validateStatus="rules.name ? 'error' : null"
+                        class="required"
+                    >
+                        <a-input
+                            v-model:value="formData.name"
+                            placeholder="Client Name"
+                            @pressEnter="onSubmit"
+                        />
+                    </a-form-item>
+
+                    <a-form-item
+                        label="Email"
+                        name="email"
+                        :help="rules.email ? rules.email[0] : null"
+                        :validateStatus="rules.email ? 'error' : null"
+                        class="required"
+                    >
+                        <a-input
+                            v-model:value="formData.email"
+                            placeholder="Enter Client Email"
+                            @pressEnter="onSubmit"
+                        />
+                    </a-form-item>
+
+                    <a-form-item
+                        label="Role"
+                        name="role"
+                        :help="rules.role ? rules.role[0] : null"
+                        :validateStatus="rules.role ? 'error' : null"
+                        class="required"
+                    >
+                        <a-select
+                            v-model:value="formData.role"
+                            placeholder="Enter Client Role"
+                        >
+                            <a-select-option value="admin">Admin</a-select-option>
+                            <a-select-option value="member">Member</a-select-option>
+                        </a-select>
+                    </a-form-item>
+
+                    <a-form-item>
+                        <a-button
+                            @click="onSubmit"
+                            :loading="loading"
+                            type="primary"
+                            block
+                        >
+                            Send Invitation
+                        </a-button>
+                    </a-form-item>
+                </a-form>
+            </a-col>
+        </a-row>
+    </a-modal>
+</template>
+
+<script>
+import { ref } from "vue";
+import { message } from "ant-design-vue";
+import apiAdmin from "@/services/apiAdmin";
+
+export default {
+    setup() {
+        const { loading, rules, apiRequest } = apiAdmin();
+
+        const formData = ref({
+            name: "",
+            email: "",
+            role: "member",
+        });
+        const open = ref(false);
+
+        const showModal = () => {
+            open.value = true;
+        };
+
+        const onSubmit = () => {
+            rules.value = {};
+            loading.value = true;
+
+            apiRequest({
+                url: "admin/team-members/invite",
+                data: formData.value,
+                success: (res) => {
+                    open.value = false;
+                    formData.value = {
+                        name: "",
+                        email: "",
+                        role: "member",
+                    };
+
+                    message.success("Invitation send successfully.");
+                },
+            });
+        };
+
+        return {
+            loading,
+            rules,
+            formData,
+            showModal,
+            onSubmit,
+            open,
+        };
+    },
+};
+</script>
